@@ -1,8 +1,10 @@
 __pycache__/
+data/
 *.pyc
 .ipynb_checkpoints/
 venv/
 logs/
 *.log
 *.zip
+*.pdf
 .DS_Store
