@@ -91,14 +91,6 @@ Variants:
 
 ---
 
-## 💻 Workflow & Compute
-- **Use scripts (`src/`)** for experiments (reproducibility).
-- **Use notebooks (`notebooks/`)** for analysis & visualization.
-- **CPU is fine** for Linear AE experiments.
-- **GPU recommended** (Colab or cluster) for LSTM or contractive AEs (much heavier).
-
----
-
 ## 🚀 How to Run
 ```bash
 # install deps
