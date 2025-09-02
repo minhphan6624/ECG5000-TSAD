@@ -8,34 +8,30 @@ This project replicates and extends the methodology from **Russo et al. (2025) �
 ```
 ecq5000-tsad/
 ├─ README.md               # Project overview (this file)
-├─ requirements.txt / pyproject.toml
+├─ requirements.txt 
 ├─ src/
-│  ├─ data/
-│  │  ├─ ecg5000.py       # Download, load, preprocess, normalize
-│  │  └─ utils.py         # Windowing, seed utils
+|  ├─ data/ 
+│  ├─ utils/
+│  │  └─ data_loader.py         
 │  ├─ models/
 │  │  ├─ ae_linear.py
 │  │  ├─ ae_conv1d.py
 │  │  └─ ae_lstm.py
 │  ├─ train/
-│  │  ├─ trainer.py       # Training loop, logging
-│  │  ├─ loss_contractive.py
-│  │  └─ noise.py         # Denoising functions
+│  │  └─ trainer.py       # Training loop, logging
 │  ├─ eval/
-│  │  ├─ thresholding.py  # Decision threshold from MSE distributions
-│  │  ├─ metrics.py       # Accuracy, ROC-AUC, PR-AUC, F1, etc.
-│  │  └─ latent.py        # PCA plots, logistic regression on latent
+│  │  ├─ thresholding.py           # Decision threshold from MSE distributions
+│  │  ├─ evaluate_model.py         # Accuracy, ROC-AUC, PR-AUC, F1, etc.
+│  │  └─ latent.py                 # PCA plots, logistic regression on latent for latent inspection
 │  ├─ config/
 │  │  ├─ linear_dae.yaml
 │  │  ├─ conv_dae.yaml
 │  │  ├─ lstm_dae.yaml
 │  │  ├─ linear_cae.yaml
 │  │  └─ linear_mixed.yaml
-│  └─ cli.py              # Entry point to run experiments
-├─ experiments/
-│  ├─ logs/               # TensorBoard or CSV logs
-│  ├─ ckpts/              # Best model checkpoints
-│  └─ figures/            # Loss curves, PCA, histograms
+│  ├─ cli.py              # Entry point to run experiments
+|  ├─ run_linear_dae.py
+|  ├─ checkpoints/
 └─ notebooks/
    ├─ 00_eda.ipynb        # Dataset exploration
    └─ 01_quick_run.ipynb  # Sanity checks
@@ -92,6 +88,7 @@ Variants:
 ---
 
 ## 🚀 How to Run
+**Note**: It's recommended to use a virtual environment (venv) or a Conda environment to install dependencies before running the project.
 ```bash
 # install deps
 pip install -r requirements.txt
@@ -102,17 +99,6 @@ python -m src.cli --config src/config/linear_dae.yaml \
 ```
 
 Outputs will be saved in `experiments/`.
-
----
-
-## ✅ Checklist for Reproduction
-- [ ] Confirm dataset split & preprocessing.
-- [ ] Train Linear DAE, match ~97.7% accuracy.
-- [ ] Log reconstruction error histograms.
-- [ ] Tune CAE λ and DAE noise σ.
-- [ ] Compare linear, conv, lstm.
-- [ ] Perform latent-space PCA + logistic regression.
-- [ ] Generate full evaluation metrics.
 
 ---
 
