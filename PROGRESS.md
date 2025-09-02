@@ -19,9 +19,7 @@ The core pipeline for the Denoising Linear Autoencoder has been successfully imp
     *   Implementation of the linear autoencoder architecture: 140 -> 32 -> 8 (latent) -> 32 -> 140.
     *   Uses ReLU activation for hidden layers, with a linear latent space.
 
-*   **Noise Injection (in `src/train/tra.py`):**
-    *   
-*   **Training Loop and Early Stopping (`src/train/trainer.py`):**
+*   **Training Loop (`src/train/trainer.py`):**
     *   A `Trainer` class that orchestrates the training process.
     *   Handles epoch loops, validation, and applies the denoising strategy.
     *   Implements early stopping based on validation loss improvement and model checkpointing.

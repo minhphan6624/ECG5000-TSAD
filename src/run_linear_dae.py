@@ -5,15 +5,15 @@ import numpy as np
 import os
 
 # Import custom modules
-from src.utils.data_loader import load_dataset, get_data_loaders
-from src.models.ae_linear import LinearAutoencoder
-from src.train.trainer import Trainer
-from src.eval.thresholding import calculate_threshold, predict_with_threshold
+from utils.data_loader import load_dataset, get_data_loaders
+from models.ae_linear import LinearAutoencoder
+from train.trainer import Trainer
+from eval.thresholding import calculate_threshold, predict_with_threshold
 from eval.evaluate_model import calculate_metrics, evaluate_model
 
 # --- Configuration ---
 # Data parameters
-DATA_DIR = "data"
+DATA_DIR = "data/ECG5000/"
 
 # Model parameters
 INPUT_DIM = 140

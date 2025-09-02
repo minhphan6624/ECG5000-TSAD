@@ -21,7 +21,7 @@ class Trainer:
     Handles training loop, validation, early stopping, and model saving.
     """
 
-    def __init__(self, model, device, train_loader, val_loader, criterion, optimizer, noise_stddev=0.05, checkpoint_dir="checkpoints"):
+    def __init__(self, model, device, train_loader, val_loader, criterion, optimizer, noise_stddev=0.05, checkpoint_dir="../checkpoints", patience=3):
         self.model = model
         self.device = device
         self.train_loader = train_loader
@@ -31,7 +31,7 @@ class Trainer:
         self.noise_stddev = noise_stddev
 
         self.best_val_loss = float('inf')
-        self.patience = 3
+        self.patience = patience
         self.bad_epochs = 0
 
         # Ensure checkpoint directory exists
