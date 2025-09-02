@@ -26,7 +26,7 @@ LEARNING_RATE = 0.001
 WEIGHT_DECAY = 1e-4
 NUM_EPOCHS = 200
 NOISE_STDDEV = 0.05
-PATIENCE = 10
+PATIENCE = 3
 CHECKPOINT_DIR = "checkpoints"
 
 
@@ -116,7 +116,7 @@ def main():
 
     # Calculate and print final metrics
     final_metrics = calculate_metrics(
-        true_labels_test, predictions_test, reconstruction_errors_test, threshold)
+        true_labels_test, predictions_test, reconstruction_errors_test)
 
     print("\n--- Performance Metrics ---")
     for key, value in final_metrics.items():

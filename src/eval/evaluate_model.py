@@ -49,7 +49,7 @@ def evaluate_model(model, test_loader, device):
     return np.array(reconstruction_errors), np.array(true_labels)
 
 
-def calculate_metrics(y_true, y_pred, errors, threshold):
+def calculate_metrics(y_true, y_pred, errors):
     """
     Calculates various performance metrics for anomaly detection and stores them in a dictionary.
 
