@@ -43,28 +43,3 @@ class LinearAutoencoder(nn.Module):
         reconstructed = self.decoder_layer2(decoded)
 
         return reconstructed, latent
-
-
-if __name__ == '__main__':
-    # Example usage and testing
-    print("Testing LinearAutoencoder model...")
-
-    # Dummy data: batch size of 64, sequence length of 140, 1 feature
-    dummy_input_np = np.random.rand(64, 140).astype(np.float32)
-    dummy_input_torch = torch.tensor(
-        dummy_input_np).unsqueeze(2)  # Add channel dim
-
-    model = LinearAutoencoder(input_dim=140, hidden_dim1=32, latent_dim=8)
-    print(f"Model architecture:\n{model}")
-
-    reconstructed_output, latent_representation = model(dummy_input_torch)
-
-    print(f"\nInput shape: {dummy_input_torch.shape}")
-    print(f"Reconstructed output shape: {reconstructed_output.shape}")
-    print(f"Latent representation shape: {latent_representation.shape}")
-
-    # Check if shapes are as expected
-    assert reconstructed_output.shape == (64, 140)
-    assert latent_representation.shape == (64, 8)
-
-    print("\nLinearAutoencoder model test passed!")
