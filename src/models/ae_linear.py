@@ -42,4 +42,7 @@ class LinearAutoencoder(nn.Module):
         decoded = F.relu(self.decoder_layer1(latent))
         reconstructed = self.decoder_layer2(decoded)
 
+        # Reshape output to match the input shape (batch_size, seq_len, 1)
+        reconstructed = reconstructed.view(-1, self.input_dim, 1)
+
         return reconstructed, latent
