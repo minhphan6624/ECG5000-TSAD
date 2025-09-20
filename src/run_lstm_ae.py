@@ -6,10 +6,11 @@ import os
 
 # Import custom modules
 from utils.data_loader import load_dataset, get_data_loaders
-from models.ae_lstm import LSTMAE # Import the new LSTM AE model
+from models.lstm_ae import LSTMAE # Import the new LSTM AE model
 from train.trainer import Trainer
 from eval.thresholding import calculate_threshold, predict_with_threshold
 from eval.evaluate_model import calculate_metrics, evaluate_model
+from eval.visualizations import plot_error_distribution, plot_roc_pr_curves, plot_reconstructions
 
 # --- Configuration ---
 # Data parameters
@@ -118,16 +119,14 @@ def main():
         # If only normal samples exist, threshold might be based on normal distribution only.
         # For anomaly detection, we need both to define a boundary.
         # If no anomalies, it's hard to evaluate anomaly detection performance.
-        # For now, let's assume there will be anomalies. If not, this might fail.
+        # Assuming there will be anomalies. If not, this might fail.
 
-    # Calculate threshold using the paper's method (MSE distribution of normal and abnormal samples)
-    # The calculate_threshold function is assumed to exist in eval.thresholding
+    # Calculate threshold 
     threshold = calculate_threshold(normal_errors_test, anomaly_errors_test)
-    print(f"Calculated threshold using paper's method: {threshold:.6f}")
+    print(f"Calculated threshold: {threshold:.6f}")
 
-    # Make predictions using the calculated threshold
-    predictions_test = predict_with_threshold(
-        reconstruction_errors_test, threshold)
+    # Make predictions 
+    predictions_test = predict_with_threshold(reconstruction_errors_test, threshold)
 
     # Calculate and print final metrics
     final_metrics = calculate_metrics(
@@ -141,6 +140,41 @@ def main():
             print(f"{key}: {value:.4f}")
     print("-------------------------\n")
 
+    # 6. Generate Visualizations
+    print("\n--- Generating Visualizations ---")
+
+    # Get original inputs from the test loader for reconstruction plots
+    all_original_inputs = []
+    with torch.no_grad():
+        for batch in test_loader:
+            inputs, _ = batch
+            all_original_inputs.extend(inputs.cpu().numpy())
+    all_original_inputs = np.array(all_original_inputs)
+
+    # Get reconstructed outputs for reconstruction plots
+    model.eval()
+    all_reconstructed_outputs = []
+    with torch.no_grad():
+        for batch in test_loader:
+            inputs, _ = batch
+            inputs = inputs.to(device)
+            reconstructed, _ = model(inputs)
+            all_reconstructed_outputs.extend(reconstructed.cpu().numpy())
+    all_reconstructed_outputs = np.array(all_reconstructed_outputs)
+
+    # Plot Error Distribution
+    plot_error_distribution(normal_errors_test, anomaly_errors_test, save_path="results/error_distribution_lstm_ae.png")
+
+    # Plot ROC and PR Curves
+    plot_roc_pr_curves(true_labels_test, reconstruction_errors_test,
+                       save_path_roc="results/roc_curve_lstm_ae.png",
+                       save_path_pr="results/pr_curve_lstm_ae.png")
+
+    # Plot Reconstructions
+    plot_reconstructions(all_original_inputs, all_reconstructed_outputs, true_labels_test,
+                         num_samples=5, save_path_prefix="results/reconstruction_lstm_ae_")
+
+    print("--- Visualizations Generated ---")
     print("--- Evaluation Finished ---")
 
 

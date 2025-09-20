@@ -34,7 +34,7 @@ class LinearAutoencoder(nn.Module):
             raise ValueError(
                 f"Input tensor must be 2D (batch_size, seq_len) or 3D (batch_size, seq_len, 1), but got {x.dim()} dimensions.")
 
-        # Encoder forward pass, with RELU as the activation func.
+        # Encoder forward pass
         encoded = F.relu(self.encoder_layer1(x))
         latent = self.encoder_layer2(encoded)
 

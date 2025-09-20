@@ -36,7 +36,7 @@ def evaluate_model(model, test_loader, device):
             inputs, labels = batch
             inputs = inputs.to(device)
 
-            # For evaluation, we don't add noise to the input
+            # Use raw, unnoised inputs for evaluation
             reconstructed, _ = model(inputs)
 
             # Calculate reconstruction error (MAE per sample)
@@ -62,6 +62,8 @@ def calculate_metrics(y_true, y_pred, errors):
     Returns:
         dict: A dictionary containing calculated metrics.
     """
+
+    # Input validation
     if not isinstance(y_true, np.ndarray) or not isinstance(y_pred, np.ndarray) or not isinstance(errors, np.ndarray):
         raise TypeError("y_true, y_pred, and errors must be numpy arrays.")
     if len(y_true) != len(y_pred) or len(y_true) != len(errors):

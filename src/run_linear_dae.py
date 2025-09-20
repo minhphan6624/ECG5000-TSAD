@@ -10,6 +10,7 @@ from models.ae_linear import LinearAutoencoder
 from train.trainer import Trainer
 from eval.thresholding import calculate_threshold, predict_with_threshold
 from eval.evaluate_model import calculate_metrics, evaluate_model
+from eval.visualizations import plot_error_distribution, plot_roc_pr_curves, plot_reconstructions
 
 # --- Configuration ---
 # Data parameters
@@ -126,6 +127,41 @@ def main():
             print(f"{key}: {value:.4f}")
     print("-------------------------\n")
 
+    # 6. Generate Visualizations
+    print("\n--- Generating Visualizations ---")
+
+    # Get original inputs from the test loader for reconstruction plots
+    all_original_inputs = []
+    with torch.no_grad():
+        for batch in test_loader:
+            inputs, _ = batch
+            all_original_inputs.extend(inputs.cpu().numpy())
+    all_original_inputs = np.array(all_original_inputs)
+
+    # Get reconstructed outputs for reconstruction plots
+    model.eval()
+    all_reconstructed_outputs = []
+    with torch.no_grad():
+        for batch in test_loader:
+            inputs, _ = batch
+            inputs = inputs.to(device)
+            reconstructed, _ = model(inputs)
+            all_reconstructed_outputs.extend(reconstructed.cpu().numpy())
+    all_reconstructed_outputs = np.array(all_reconstructed_outputs)
+
+    # Plot Error Distribution
+    plot_error_distribution(normal_errors_test, anomaly_errors_test, save_path="results/error_distribution_linear_dae.png")
+
+    # Plot ROC and PR Curves
+    plot_roc_pr_curves(true_labels_test, reconstruction_errors_test,
+                       save_path_roc="results/roc_curve_linear_dae.png",
+                       save_path_pr="results/pr_curve_linear_dae.png")
+
+    # Plot Reconstructions
+    plot_reconstructions(all_original_inputs, all_reconstructed_outputs, true_labels_test,
+                         num_samples=5, save_path_prefix="results/reconstruction_linear_dae_")
+
+    print("--- Visualizations Generated ---")
     print("--- Evaluation Finished ---")
 
 
