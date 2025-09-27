@@ -48,7 +48,7 @@ class LSTMAE(nn.Module):
         encoder_outputs, encoder_hidden = self.encoder_lstm(x)
 
         # Get the last hidden state of the encoder
-        last_hidden_state = encoder_hidden[-1, :, :] # shape: (batch, hidden_dim)
+        last_hidden_state = encoder_hidden[0][-1, :, :] # shape: (batch, hidden_dim)
 
         # Map to latent space
         latent = self.encoder_to_latent(last_hidden_state) # shape: (batch, latent_dim)

@@ -143,6 +143,9 @@ def main():
     # 6. Generate Visualizations
     print("\n--- Generating Visualizations ---")
 
+    # Ensure results directory exists
+    os.makedirs("results", exist_ok=True)
+
     # Get original inputs from the test loader for reconstruction plots
     all_original_inputs = []
     with torch.no_grad():
